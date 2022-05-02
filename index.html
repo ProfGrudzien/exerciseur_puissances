@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Entrainement Puissances</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 24pt;}
+        input {
+            font-size: 24pt;}
+        input[type=number] { 
+            -moz-appearance: textfield;
+            appearance: textfield;
+            height: 50px;
+            width: 50px;
+            margin: 4px;
+            text-align: center}
+        sup input[type=number] {
+            height: 30px;
+            width: 30px;
+            font-size: 20pt;
+        }
+        input::-webkit-inner-spin-button,
+        input::-webkit-outer-spin-button { 
+            -webkit-appearance: none;
+            margin:0;}
+        input::-o-inner-spin-button,
+        input::-o-outer-spin-button { 
+            -o-appearance: none;
+            margin:0;}
+        span.math{
+            font-size: 30pt;
+            white-space: nowrap;}
+        span.frac{
+            display: inline-block;
+            position: relative;
+            vertical-align: middle;}
+        span.haut{
+            display: block;
+            text-align: center;
+            font-size: 30pt;}
+        span.bas{
+            display: block;
+            border-top: 2px solid;
+            text-align: center;
+            font-size: 30pt;}
+        span.aDroite{
+            float: right;}
+        div.correction{
+            color: blue;}
+    </style>
+    <script language="javascript">
+        function fraction(a,b) {
+            return '<span class="frac"><span class="haut">'+a+'</span><span class="bas">'+b+'</span></span>'};
+        function controle(form) {
+            var base = form.querySelector(".eBase").value;
+            var expo  = form.querySelector(".eExpo").value;
+            if (base != form.base || expo != form.expo) {form.querySelector('label[name="reponse"]').innerHTML = "FAUX";}
+            else {form.querySelector('label[name="reponse"]').innerHTML = "VRAI";}
+        }
+        function afficherCorrection(form) {
+            form.querySelector('div[class="correction"]').innerHTML = form.correction};
+    </script>
+</head>
+
+<body>
+  <fieldset>
+      <legend>Question 1</legend>
+      <form id="Q1">
+        <label class="question"></label>
+        <input type="number" class="eBase"></input><sup><input type="number" class="eExpo"></input></sup>
+        <input type="button" onClick="controle(Q1)" value="Vérifier"/>
+        <label name="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q1)" value="Correction"/></span></div>
+        <script language="javascript">
+            var form = document.getElementById("Q1");
+            form.querySelector(".eBase").value = '';
+            form.querySelector(".eExpo").value = '';
+            var b = Math.floor(Math.random() * 10 + 2);
+            var p = Math.floor(Math.random() * 8 + 2);
+            var q = Math.floor(Math.random() * 8 + 2);
+            form.base = b;
+            form.expo = p+q;
+            var txt_q = `${b}<sup>${p}</sup> &times; ${b}<sup>${q}</sup> =`
+            form.querySelector(".question").innerHTML = txt_q;
+            var txt_r = 'Prochainement';
+            form.correction = txt_r;
+        </script>
+      </form>
+  </fieldset>
+  
+  <fieldset>
+      <legend>Question 2</legend>
+      <form id="Q2">
+        <label class="question"></label>
+        <input type="number" class="eBase"></input><sup><input type="number" class="eExpo"></input></sup>
+        <input type="button" onClick="controle(Q2)" value="Vérifier"/>
+        <label name="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q2)" value="Correction"/></span></div>
+        <script language="javascript">
+            var form = document.getElementById("Q2");
+            form.querySelector(".eBase").value = '';
+            form.querySelector(".eExpo").value = '';
+            var b = Math.floor(Math.random() * 10 + 2);
+            var p = Math.floor(Math.random() * 8 + 2);
+            var q = Math.floor(Math.random() * 8 + 2);
+            while (p-q < 1) {
+                var p = Math.floor(Math.random() * 8 + 2);
+                var q = Math.floor(Math.random() * 8 + 2);
+            }
+            form.base = b;
+            form.expo = p-q;
+            var txt_q = fraction(`${b}<sup>${p}</sup>`,`${b}<sup>${q}</sup>`) + ' ='
+            form.querySelector(".question").innerHTML = txt_q;
+            var txt_r = 'Prochainement';
+            form.correction = txt_r;
+        </script>
+      </form>
+  </fieldset>
+  
+  <fieldset>
+      <legend>Question 3</legend>
+      <form id="Q3">
+        <label class="question"></label>
+        <input type="number" class="eBase"></input><sup><input type="number" class="eExpo"></input></sup>
+        <input type="button" onClick="controle(Q3)" value="Vérifier"/>
+        <label name="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q3)" value="Correction"/></span></div>
+        <script language="javascript">
+            var form = document.getElementById("Q3");
+            form.querySelector(".eBase").value = '';
+            form.querySelector(".eExpo").value = '';
+            var b = Math.floor(Math.random() * 10 + 2);
+            var p = Math.floor(Math.random() * 8 + 2);
+            var q = Math.floor(Math.random() * 8 + 2);
+            form.base = b;
+            form.expo = p*q;
+            var txt_q = `(${b}<sup>${p}</sup>)<sup>${q}</sup> =`
+            form.querySelector(".question").innerHTML = txt_q;
+            var txt_r = 'Prochainement';
+            form.correction = txt_r;
+        </script>
+      </form>
+  </fieldset>
+  
+</body>
+</html>
