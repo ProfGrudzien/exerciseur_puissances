@@ -16,6 +16,8 @@
             width: 50px;
             margin: 4px;
             text-align: center}
+        input[type=number].long { 
+            width: 150px;}
         sup input[type=number] {
             height: 30px;
             width: 30px;
@@ -30,7 +32,7 @@
             -o-appearance: none;
             margin:0;}
         span.math{
-            font-size: 30pt;
+            font-size: 24pt;
             white-space: nowrap;}
         span.frac{
             display: inline-block;
@@ -39,12 +41,12 @@
         span.haut{
             display: block;
             text-align: center;
-            font-size: 30pt;}
+            font-size: 24pt;}
         span.bas{
             display: block;
             border-top: 2px solid;
             text-align: center;
-            font-size: 30pt;}
+            font-size: 24pt;}
         span.aDroite{
             float: right;}
         div.correction{
@@ -52,15 +54,18 @@
     </style>
     <script language="javascript">
         function fraction(a,b) {
-            return '<span class="frac"><span class="haut">'+a+'</span><span class="bas">'+b+'</span></span>'};
+            return '<span class="frac"><span class="haut">'+a+'</span><span class="bas">'+b+'</span></span>'
+        };
         function controle(form) {
-            var base = form.querySelector(".eBase").value;
-            var expo  = form.querySelector(".eExpo").value;
-            if (base != form.base || expo != form.expo) {form.querySelector('label[name="reponse"]').innerHTML = "FAUX";}
-            else {form.querySelector('label[name="reponse"]').innerHTML = "VRAI";}
+            if (form.inputBase.value != form.sol.base || form.inputExpo.value != form.sol.expo) {
+                form.labelReponse.innerHTML = "FAUX";
+            } else {
+                form.labelReponse.innerHTML = "VRAI";
+            }
         }
         function afficherCorrection(form) {
-            form.querySelector('div[class="correction"]').innerHTML = form.correction};
+            form.divCorrection.innerHTML = form.correction
+        };
     </script>
 </head>
 
@@ -71,21 +76,23 @@
         <label class="question"></label>
         <input type="number" class="eBase"></input><sup><input type="number" class="eExpo"></input></sup>
         <input type="button" onClick="controle(Q1)" value="Vérifier"/>
-        <label name="reponse"></label>
+        <label class="reponse"></label>
         <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q1)" value="Correction"/></span></div>
         <script language="javascript">
             var form = document.getElementById("Q1");
-            form.querySelector(".eBase").value = '';
-            form.querySelector(".eExpo").value = '';
-            var b = Math.floor(Math.random() * 10 + 2);
-            var p = Math.floor(Math.random() * 8 + 2);
-            var q = Math.floor(Math.random() * 8 + 2);
-            form.base = b;
-            form.expo = p+q;
-            var txt_q = `${b}<sup>${p}</sup> &times; ${b}<sup>${q}</sup> =`
-            form.querySelector(".question").innerHTML = txt_q;
-            var txt_r = 'Prochainement';
-            form.correction = txt_r;
+            form.labelQuestion = form.querySelector(".question")
+            form.labelReponse = form.querySelector(".reponse")
+            form.divCorrection = form.querySelector('.correction')
+            form.inputBase = form.querySelector(".eBase")
+            form.inputExpo = form.querySelector(".eExpo")
+            form.inputExpo.value = '';
+            form.inputBase.value = '';
+            form.valb = Math.floor(Math.random() * 10 + 2);
+            form.valp = Math.floor(Math.random() * 8 + 2);
+            form.valq = Math.floor(Math.random() * 8 + 2);
+            form.sol = {base:form.valb, expo: form.valp+form.valq}
+            form.labelQuestion.innerHTML = `${form.valb}<sup>${form.valp}</sup> &times; ${form.valb}<sup>${form.valq}</sup> =`
+            form.texteCorrection = 'Prochainement';
         </script>
       </form>
   </fieldset>
@@ -96,25 +103,28 @@
         <label class="question"></label>
         <input type="number" class="eBase"></input><sup><input type="number" class="eExpo"></input></sup>
         <input type="button" onClick="controle(Q2)" value="Vérifier"/>
-        <label name="reponse"></label>
+        <label class="reponse"></label>
         <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q2)" value="Correction"/></span></div>
         <script language="javascript">
             var form = document.getElementById("Q2");
-            form.querySelector(".eBase").value = '';
-            form.querySelector(".eExpo").value = '';
-            var b = Math.floor(Math.random() * 10 + 2);
-            var p = Math.floor(Math.random() * 8 + 2);
-            var q = Math.floor(Math.random() * 8 + 2);
-            while (p-q < 1) {
-                var p = Math.floor(Math.random() * 8 + 2);
-                var q = Math.floor(Math.random() * 8 + 2);
+            form.labelQuestion = form.querySelector(".question")
+            form.labelReponse = form.querySelector(".reponse")
+            form.divCorrection = form.querySelector('.correction')
+            form.inputBase = form.querySelector(".eBase")
+            form.inputExpo = form.querySelector(".eExpo")
+            form.inputExpo.value = '';
+            form.inputBase.value = '';
+            form.valb = Math.floor(Math.random() * 10 + 2);
+            form.valp = Math.floor(Math.random() * 6 + 2);
+            form.valq = Math.floor(Math.random() * 8 + 2);
+            while (form.valp-form.valq < 2) {
+                form.valp = Math.floor(Math.random() * 6 + 2);
+                form.valq = Math.floor(Math.random() * 8 + 2);
             }
-            form.base = b;
-            form.expo = p-q;
-            var txt_q = fraction(`${b}<sup>${p}</sup>`,`${b}<sup>${q}</sup>`) + ' ='
-            form.querySelector(".question").innerHTML = txt_q;
-            var txt_r = 'Prochainement';
-            form.correction = txt_r;
+            
+            form.sol = {base:form.valb, expo:form.valp-form.valq}
+            form.labelQuestion.innerHTML = fraction(`${form.valb}<sup>${form.valp}</sup>`,`${form.valb}<sup>${form.valq}</sup>`) + ' ='
+            form.texteCorrection = 'Prochainement';
         </script>
       </form>
   </fieldset>
@@ -125,21 +135,125 @@
         <label class="question"></label>
         <input type="number" class="eBase"></input><sup><input type="number" class="eExpo"></input></sup>
         <input type="button" onClick="controle(Q3)" value="Vérifier"/>
-        <label name="reponse"></label>
+        <label class="reponse"></label>
         <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q3)" value="Correction"/></span></div>
         <script language="javascript">
             var form = document.getElementById("Q3");
-            form.querySelector(".eBase").value = '';
-            form.querySelector(".eExpo").value = '';
-            var b = Math.floor(Math.random() * 10 + 2);
-            var p = Math.floor(Math.random() * 8 + 2);
-            var q = Math.floor(Math.random() * 8 + 2);
-            form.base = b;
-            form.expo = p*q;
-            var txt_q = `(${b}<sup>${p}</sup>)<sup>${q}</sup> =`
-            form.querySelector(".question").innerHTML = txt_q;
-            var txt_r = 'Prochainement';
-            form.correction = txt_r;
+            form.labelQuestion = form.querySelector(".question")
+            form.labelReponse = form.querySelector(".reponse")
+            form.divCorrection = form.querySelector('.correction')
+            form.inputBase = form.querySelector(".eBase")
+            form.inputExpo = form.querySelector(".eExpo")
+            form.inputExpo.value = '';
+            form.inputBase.value = '';
+            form.valb = Math.floor(Math.random() * 10 + 2);
+            form.valp = Math.floor(Math.random() * 8 + 2);
+            form.valq = Math.floor(Math.random() * 8 + 2);
+            form.sol = {base:form.valb, expo: form.valp*form.valq}
+            form.labelQuestion.innerHTML = `(${form.valb}<sup>${form.valp}</sup>)<sup>${form.valq}</sup> =`
+            form.texteCorrection = 'Prochainement';
+        </script>
+      </form>
+  </fieldset>
+  
+  <fieldset>
+      <legend>Question 4</legend>
+      <form id="Q4">
+        <label class="question"></label>
+        <input type="number" class="eBase"></input><sup><input type="number" class="eExpo"></input></sup>
+        <input type="button" onClick="controle(Q4)" value="Vérifier"/>
+        <label class="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q4)" value="Correction"/></span></div>
+        <script language="javascript">
+            var form = document.getElementById("Q4");
+            form.labelQuestion = form.querySelector(".question")
+            form.labelReponse = form.querySelector(".reponse")
+            form.divCorrection = form.querySelector('.correction')
+            form.inputBase = form.querySelector(".eBase")
+            form.inputExpo = form.querySelector(".eExpo")
+            form.inputExpo.value = '';
+            form.inputBase.value = '';
+            form.vala = Math.floor(Math.random() * 8 + 2);
+            form.valb = Math.floor(Math.random() * 8 + 2);
+            form.valn = Math.floor(Math.random() * 10 + 2);
+            form.sol = {base:form.vala*form.valb, expo:form.valn}
+            form.labelQuestion.innerHTML = `${form.vala}<sup>${form.valn}</sup> &times; ${form.valb}<sup>${form.valn}</sup> =`
+            form.texteCorrection = 'Prochainement';
+        </script>
+      </form>
+  </fieldset>
+  
+  <fieldset>
+      <legend>Question 5</legend>
+      <form id="Q5">
+        <label class="question"></label>
+        <input type="number" class="eBase"></sup>
+        <input type="button" onClick="controle(Q5)" value="Vérifier"/>
+        <label class="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q5)" value="Correction"/></span></div>
+        <script language="javascript">
+            var form = document.getElementById("Q5");
+            form.labelQuestion = form.querySelector(".question")
+            form.labelReponse = form.querySelector(".reponse")
+            form.divCorrection = form.querySelector('.correction')
+            form.inputBase = form.querySelector(".eBase")
+            form.inputExpo = {value:0}
+            form.inputBase.value = '';
+            form.vala = Math.floor(Math.random() * 2);
+            form.valn = Math.floor(Math.random() * 10 + 2);
+            form.sol = {base:Math.pow(form.vala, form.valn), expo:0}
+            form.labelQuestion.innerHTML = `Ecrire ${form.vala}<sup>${form.valn}</sup> sous la forme d'un nombre entier : `
+            form.texteCorrection = 'Prochainement';
+        </script>
+      </form>
+  </fieldset>
+  
+  <fieldset>
+      <legend>Question 6</legend>
+      <form id="Q6">
+        <label class="question"></label>
+        <input type="number" class="eBase"></sup>
+        <input type="button" onClick="controle(Q6)" value="Vérifier"/>
+        <label class="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q6)" value="Correction"/></span></div>
+        <script language="javascript">
+            var form = document.getElementById("Q6");
+            form.labelQuestion = form.querySelector(".question")
+            form.labelReponse = form.querySelector(".reponse")
+            form.divCorrection = form.querySelector('.correction')
+            form.inputBase = form.querySelector(".eBase")
+            form.inputExpo = {value:0}
+            form.inputBase.value = '';
+            form.vala = Math.floor(Math.random() * 9 + 2);
+            form.valn = Math.floor(Math.random() * 3);
+            form.sol = {base:Math.pow(form.vala, form.valn), expo:0}
+            form.labelQuestion.innerHTML = `Ecrire ${form.vala}<sup>${form.valn}</sup> sous la forme d'un nombre entier : `
+            form.texteCorrection = 'Prochainement';
+        </script>
+      </form>
+  </fieldset>
+  
+  <fieldset>
+      <legend>Question 7</legend>
+      <form id="Q7">
+        <label class="question"></label>
+        <input type="number" class="eBase long"></sup>
+        <input type="button" onClick="controle(Q7)" value="Vérifier"/>
+        <label class="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q7)" value="Correction"/></span></div>
+        <script language="javascript">
+            var form = document.getElementById("Q7");
+            form.labelQuestion = form.querySelector(".question")
+            form.labelReponse = form.querySelector(".reponse")
+            form.divCorrection = form.querySelector('.correction')
+            form.inputBase = form.querySelector(".eBase")
+            form.inputExpo = {value:0}
+            form.inputBase.value = '';
+            form.vala = 10;
+            form.valn = Math.floor(Math.random() * 7);
+            form.sol = {base:Math.pow(form.vala, form.valn), expo:0}
+            form.labelQuestion.innerHTML = `Ecrire ${form.vala}<sup>${form.valn}</sup> sous la forme d'un nombre entier : `
+            form.texteCorrection = 'Prochainement';
         </script>
       </form>
   </fieldset>
