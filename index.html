@@ -64,8 +64,14 @@
             }
         }
         function afficherCorrection(form) {
-            form.divCorrection.innerHTML = form.correction
+            form.divCorrection.innerHTML = form.texteCorrection
         };
+        function tirage(mini, maxi, nonZero, nonUn) {
+            const a = Math.floor(Math.random() * (1+maxi-mini) + mini);
+            if (nonZero && a==0) {return tirage(mini, maxi, nonZero, nonUn)}
+            if (nonUn && a==1) {return tirage(mini, maxi, nonZero, nonUn)}
+            return a
+        }
     </script>
 </head>
 
@@ -87,12 +93,12 @@
             form.inputExpo = form.querySelector(".eExpo")
             form.inputExpo.value = '';
             form.inputBase.value = '';
-            form.valb = Math.floor(Math.random() * 10 + 2);
-            form.valp = Math.floor(Math.random() * 8 + 2);
-            form.valq = Math.floor(Math.random() * 8 + 2);
+            form.valb = tirage(2, 10, true, true);
+            form.valp = tirage(-10, 10, true, true);
+            form.valq = tirage(-10, 10, true, true);
             form.sol = {base:form.valb, expo: form.valp+form.valq}
             form.labelQuestion.innerHTML = `${form.valb}<sup>${form.valp}</sup> &times; ${form.valb}<sup>${form.valq}</sup> =`
-            form.texteCorrection = 'Prochainement';
+            form.texteCorrection = `${form.valb}<sup>${form.valp}</sup> &times; ${form.valb}<sup>${form.valq}</sup> = ${form.valb}<sup>${form.valp}+${form.valq}</sup> = ${form.valb}<sup>${form.valp+form.valq}</sup>`;
         </script>
       </form>
   </fieldset>
@@ -114,17 +120,14 @@
             form.inputExpo = form.querySelector(".eExpo")
             form.inputExpo.value = '';
             form.inputBase.value = '';
-            form.valb = Math.floor(Math.random() * 10 + 2);
-            form.valp = Math.floor(Math.random() * 6 + 2);
-            form.valq = Math.floor(Math.random() * 8 + 2);
-            while (form.valp-form.valq < 2) {
-                form.valp = Math.floor(Math.random() * 6 + 2);
-                form.valq = Math.floor(Math.random() * 8 + 2);
-            }
-            
-            form.sol = {base:form.valb, expo:form.valp-form.valq}
-            form.labelQuestion.innerHTML = fraction(`${form.valb}<sup>${form.valp}</sup>`,`${form.valb}<sup>${form.valq}</sup>`) + ' ='
-            form.texteCorrection = 'Prochainement';
+            form.valb = tirage(2, 10, true, true);
+            form.valp = tirage(-10, 10, true, true);
+            while (form.valp == -1) {form.valp = tirage(-10, 10, true, true);}
+            form.sol = {base:form.valb, expo:-form.valp}
+            form.labelQuestion.innerHTML = fraction(1,`${form.valb}<sup>${form.valp}</sup>`) + ' ='
+            form.texteCorrection = fraction(1,`${form.valb}<sup>${form.valp}</sup>`);
+            if (form.valp<0) {form.texteCorrection += ` = ${form.valb}<sup>-(${form.valp})</sup>`;};
+            form.texteCorrection += ` = ${form.valb}<sup>${-form.valp}</sup>`;
         </script>
       </form>
   </fieldset>
@@ -146,12 +149,20 @@
             form.inputExpo = form.querySelector(".eExpo")
             form.inputExpo.value = '';
             form.inputBase.value = '';
-            form.valb = Math.floor(Math.random() * 10 + 2);
-            form.valp = Math.floor(Math.random() * 8 + 2);
-            form.valq = Math.floor(Math.random() * 8 + 2);
-            form.sol = {base:form.valb, expo: form.valp*form.valq}
-            form.labelQuestion.innerHTML = `(${form.valb}<sup>${form.valp}</sup>)<sup>${form.valq}</sup> =`
-            form.texteCorrection = 'Prochainement';
+            form.valb = tirage(2, 10, true, true);
+            form.valp = tirage(-10, 10, true, true);
+            form.valq = tirage(-10, 10, true, true);
+            while (Math.abs(form.valp-form.valq) < 2) {
+                form.valp = tirage(-10, 10, true, true);
+                form.valq = tirage(-10, 10, true, true);
+            }
+            
+            form.sol = {base:form.valb, expo:form.valp-form.valq}
+            form.labelQuestion.innerHTML = fraction(`${form.valb}<sup>${form.valp}</sup>`,`${form.valb}<sup>${form.valq}</sup>`) + ' ='
+            form.texteCorrection = fraction(`${form.valb}<sup>${form.valp}</sup>`,`${form.valb}<sup>${form.valq}</sup>`);
+            form.texteCorrection += ` = ${form.valb}<sup>${form.valp}-${form.valq>0?form.valq:`(${form.valq})`}</sup>`
+            if (form.valq<0) {form.texteCorrection += ` = ${form.valb}<sup>${form.valp}+${-form.valq}</sup>`}
+            form.texteCorrection += ` = ${form.valb}<sup>${form.valp-form.valq}</sup>`
         </script>
       </form>
   </fieldset>
@@ -173,12 +184,15 @@
             form.inputExpo = form.querySelector(".eExpo")
             form.inputExpo.value = '';
             form.inputBase.value = '';
-            form.vala = Math.floor(Math.random() * 8 + 2);
-            form.valb = Math.floor(Math.random() * 8 + 2);
-            form.valn = Math.floor(Math.random() * 10 + 2);
-            form.sol = {base:form.vala*form.valb, expo:form.valn}
-            form.labelQuestion.innerHTML = `${form.vala}<sup>${form.valn}</sup> &times; ${form.valb}<sup>${form.valn}</sup> =`
-            form.texteCorrection = 'Prochainement';
+            form.valb = tirage(2, 10, true, true);
+            form.valp = tirage(-10, 10, true, true);
+            form.valq = tirage(-10, 10, true, true);
+            
+            form.sol = {base:form.valb, expo: form.valp*form.valq}
+            form.labelQuestion.innerHTML = `(${form.valb}<sup>${form.valp}</sup>)<sup>${form.valq}</sup> =`
+            form.texteCorrection = `(${form.valb}<sup>${form.valp}</sup>)<sup>${form.valq}</sup>`;
+            form.texteCorrection += ` = ${form.valb}<sup>${form.valp}&times;${form.valq>0?form.valq:`(${form.valq})`}</sup>`
+            form.texteCorrection += ` = ${form.valb}<sup>${form.valp*form.valq}</sup>`
         </script>
       </form>
   </fieldset>
@@ -187,7 +201,7 @@
       <legend>Question 5</legend>
       <form id="Q5">
         <label class="question"></label>
-        <input type="number" class="eBase"></sup>
+        <input type="number" class="eBase"></input><sup><input type="number" class="eExpo"></input></sup>
         <input type="button" onClick="controle(Q5)" value="Vérifier"/>
         <label class="reponse"></label>
         <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q5)" value="Correction"/></span></div>
@@ -197,13 +211,15 @@
             form.labelReponse = form.querySelector(".reponse")
             form.divCorrection = form.querySelector('.correction')
             form.inputBase = form.querySelector(".eBase")
-            form.inputExpo = {value:0}
+            form.inputExpo = form.querySelector(".eExpo")
+            form.inputExpo.value = '';
             form.inputBase.value = '';
-            form.vala = Math.floor(Math.random() * 2);
-            form.valn = Math.floor(Math.random() * 10 + 2);
-            form.sol = {base:Math.pow(form.vala, form.valn), expo:0}
-            form.labelQuestion.innerHTML = `Ecrire ${form.vala}<sup>${form.valn}</sup> sous la forme d'un nombre entier : `
-            form.texteCorrection = 'Prochainement';
+            form.vala = tirage(2, 10, true, true);
+            form.valb = tirage(2, 10, true, true);
+            form.valn = tirage(-10, 10, true, true);
+            form.sol = {base:form.vala*form.valb, expo:form.valn}
+            form.labelQuestion.innerHTML = `${form.vala}<sup>${form.valn}</sup> &times; ${form.valb}<sup>${form.valn}</sup> =`
+            form.texteCorrection = `${form.vala}<sup>${form.valn}</sup> &times; ${form.valb}<sup>${form.valn}</sup> = (${form.vala} &times; ${form.valb})<sup>${form.valn}</sup> = ${form.vala*form.valb}<sup>${form.valn}</sup>`;
         </script>
       </form>
   </fieldset>
@@ -224,11 +240,13 @@
             form.inputBase = form.querySelector(".eBase")
             form.inputExpo = {value:0}
             form.inputBase.value = '';
-            form.vala = Math.floor(Math.random() * 9 + 2);
-            form.valn = Math.floor(Math.random() * 3);
+            form.vala = tirage(0, 1, false, false);
+            form.valn = tirage(-10, 10, true, true);
+            if (form.vala == 0) {form.valn = Math.abs(form.valn)}
             form.sol = {base:Math.pow(form.vala, form.valn), expo:0}
             form.labelQuestion.innerHTML = `Ecrire ${form.vala}<sup>${form.valn}</sup> sous la forme d'un nombre entier : `
-            form.texteCorrection = 'Prochainement';
+            if (form.vala == 0) {form.texteCorrection = `Pour tout nombre entier naturel non nul n, 0<sup>n</sup> est égal à 0. Donc ${form.vala}<sup>${form.valn}</sup> = 0`;}
+            if (form.vala == 1) {form.texteCorrection = `Pour tout nombre entier n, 1<sup>n</sup> est égal à 1. Donc ${form.vala}<sup>${form.valn}</sup> = 1`;}
         </script>
       </form>
   </fieldset>
@@ -237,7 +255,7 @@
       <legend>Question 7</legend>
       <form id="Q7">
         <label class="question"></label>
-        <input type="number" class="eBase long"></sup>
+        <input type="number" class="eBase"></sup>
         <input type="button" onClick="controle(Q7)" value="Vérifier"/>
         <label class="reponse"></label>
         <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q7)" value="Correction"/></span></div>
@@ -249,11 +267,39 @@
             form.inputBase = form.querySelector(".eBase")
             form.inputExpo = {value:0}
             form.inputBase.value = '';
-            form.vala = 10;
-            form.valn = Math.floor(Math.random() * 7);
+            form.vala = tirage(2, 9, true, true);
+            form.valn = tirage(0, 2, false, false);
             form.sol = {base:Math.pow(form.vala, form.valn), expo:0}
             form.labelQuestion.innerHTML = `Ecrire ${form.vala}<sup>${form.valn}</sup> sous la forme d'un nombre entier : `
-            form.texteCorrection = 'Prochainement';
+            if (form.valn == 0) {form.texteCorrection = `Pour tout nombre non nul a, a<sup>0</sup> est égal à 1. Donc ${form.vala}<sup>${form.valn}</sup> = 1`;}
+            if (form.valn == 1) {form.texteCorrection = `Pour tout nombre non nul a, a<sup>1</sup> est égal à a. Donc ${form.vala}<sup>${form.valn}</sup> = ${form.vala}`;}
+            if (form.valn == 2) {form.texteCorrection = `${form.vala}<sup>2</sup> = ${form.vala} &times; ${form.vala} = ${form.vala*form.vala}`;}
+        </script>
+      </form>
+  </fieldset>
+  
+  <fieldset>
+      <legend>Question 8</legend>
+      <form id="Q8">
+        <label class="question"></label>
+        <input type="number" class="eBase long"></sup>
+        <input type="button" onClick="controle(Q8)" value="Vérifier"/>
+        <label class="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(Q8)" value="Correction"/></span></div>
+        <script language="javascript">
+            var form = document.getElementById("Q8");
+            form.labelQuestion = form.querySelector(".question")
+            form.labelReponse = form.querySelector(".reponse")
+            form.divCorrection = form.querySelector('.correction')
+            form.inputBase = form.querySelector(".eBase")
+            form.inputExpo = {value:0}
+            form.inputBase.value = '';
+            form.vala = 10;
+            form.valn = tirage(1, 7, true, false);
+            form.sol = {base:Math.pow(form.vala, form.valn), expo:0}
+            form.labelQuestion.innerHTML = `Ecrire ${form.vala}<sup>${form.valn}</sup> sous la forme d'un nombre entier : `
+            form.texteCorrection = `${form.vala}<sup>${form.valn}</sup> s'écrit comme un 1 suivit par ${form.valn} zéros. `;
+            form.texteCorrection += `Donc ${form.vala}<sup>${form.valn}</sup> = ${Math.pow(form.vala, form.valn)}`;
         </script>
       </form>
   </fieldset>
